@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { X, Phone, MapPin, Calendar, Tag, MessageSquare, CheckCircle, XCircle } from 'lucide-react'
 import type { Lead, StatusLead } from '@/lib/types'
 import { getStatusConfig, getCategoriaConfig, formatDate } from '@/lib/utils'
@@ -48,6 +49,7 @@ function BooleanField({ label, value }: { label: string; value: string }) {
 }
 
 export function LeadModal({ lead, onClose, onUpdate }: LeadModalProps) {
+  const router = useRouter()
   const [editingStatus, setEditingStatus] = useState(false)
   const [selectedStatus, setSelectedStatus] = useState<StatusLead>(lead.Status_lead)
   const [saving, setSaving] = useState(false)
@@ -63,6 +65,7 @@ export function LeadModal({ lead, onClose, onUpdate }: LeadModalProps) {
       setSaveMsg('Status atualizado!')
       setEditingStatus(false)
       onUpdate?.({ ...lead, Status_lead: selectedStatus })
+      router.refresh()
       setTimeout(() => setSaveMsg(''), 3000)
     } catch {
       setSaveMsg('Erro ao atualizar. Tente novamente.')
