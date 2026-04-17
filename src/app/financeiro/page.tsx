@@ -208,7 +208,7 @@ function TransacaoModal({ onClose, onSave, editData }: {
 // ── Página principal ─────────────────────────────────────────────────────────
 export default function FinanceiroPage() {
   const [transacoes, setTransacoes] = useState<Transacao[]>([])
-  const [periodo, setPeriodo] = useState<PeriodoFiltro>('mes')
+  const [periodo, setPeriodo] = useState<PeriodoFiltro>('tudo')
   const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
   const [editData, setEditData] = useState<Transacao | null>(null)
