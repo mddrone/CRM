@@ -1,5 +1,5 @@
 import { getLeads } from '@/lib/api'
-import type { Lead, StatusLead } from '@/lib/types'
+import type { Lead } from '@/lib/types'
 import { getStatusConfig, getCategoriaConfig, formatDate } from '@/lib/utils'
 import { Calendar, Tag } from 'lucide-react'
 
@@ -89,7 +89,7 @@ function KanbanColumn({
   border,
   leads,
 }: {
-  status: StatusLead
+  status: string
   label: string
   color: string
   border: string
