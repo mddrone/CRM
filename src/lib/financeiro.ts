@@ -1,7 +1,14 @@
-import { createClient } from '../../utils/supabase/client'
+import { createBrowserClient } from '@supabase/ssr'
 import type { Transacao, FinanceiroMetrics } from './types'
 import { format, startOfMonth, endOfMonth, subMonths, parseISO, isValid } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
+
+const FINANCEIRO_URL = process.env.NEXT_PUBLIC_SUPABASE_FINANCEIRO_URL!
+const FINANCEIRO_KEY = process.env.NEXT_PUBLIC_SUPABASE_FINANCEIRO_KEY!
+
+function createFinanceiroClient() {
+  return createBrowserClient(FINANCEIRO_URL, FINANCEIRO_KEY)
+}
 
 export type PeriodoFiltro = 'hoje' | '7dias' | 'mes' | '3meses' | '6meses' | 'ano' | 'tudo'
 
@@ -41,7 +48,7 @@ function parseDataTransacao(raw: string): Date | null {
 }
 
 export async function getTransacoes(periodo: PeriodoFiltro = 'mes'): Promise<Transacao[]> {
-  const supabase = createClient()
+  const supabase = createFinanceiroClient()
   const { data, error } = await supabase
     .from('Gastos')
     .select('*')
@@ -67,20 +74,20 @@ export async function getTransacoes(periodo: PeriodoFiltro = 'mes'): Promise<Tra
 }
 
 export async function criarTransacao(t: Omit<Transacao, 'id' | 'created_at'>): Promise<Transacao | null> {
-  const supabase = createClient()
+  const supabase = createFinanceiroClient()
   const { data, error } = await supabase.from('Gastos').insert([t]).select().single()
   if (error) { console.error(error); return null }
   return data as Transacao
 }
 
 export async function deletarTransacao(id: number): Promise<boolean> {
-  const supabase = createClient()
+  const supabase = createFinanceiroClient()
   const { error } = await supabase.from('Gastos').delete().eq('id', id)
   return !error
 }
 
 export async function atualizarTransacao(id: number, updates: Partial<Transacao>): Promise<Transacao | null> {
-  const supabase = createClient()
+  const supabase = createFinanceiroClient()
   const { data, error } = await supabase.from('Gastos').update(updates).eq('id', id).select().single()
   if (error) { console.error(error); return null }
   return data as Transacao
