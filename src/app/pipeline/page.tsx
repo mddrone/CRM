@@ -3,7 +3,7 @@ import type { Lead } from '@/lib/types'
 import { getStatusConfig, getCategoriaConfig, formatDate } from '@/lib/utils'
 import { Calendar, Tag } from 'lucide-react'
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
 
 // Normaliza os valores reais da planilha para os status do pipeline
 function normalizeStatus(raw: string): string {

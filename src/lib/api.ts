@@ -15,7 +15,7 @@ export async function getLeads(): Promise<Lead[]> {
 
   try {
     const res = await fetch(`${BASE}/webhook/dash-api?token=${TOKEN}&type=leads`, {
-      next: { revalidate: 60 },
+      cache: 'no-store',
     })
     if (!res.ok) throw new Error(`HTTP ${res.status}`)
     const data = await res.json()

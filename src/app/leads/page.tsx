@@ -2,7 +2,7 @@ import { getLeads } from '@/lib/api'
 import { LeadsTable } from '@/components/leads/LeadsTable'
 import { Users } from 'lucide-react'
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
 
 export default async function LeadsPage() {
   const leads = await getLeads()
