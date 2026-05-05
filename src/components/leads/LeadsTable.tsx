@@ -1,10 +1,11 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import { Search, Filter, ChevronRight, X } from 'lucide-react'
+import { Search, Filter, ChevronRight, X, UserPlus } from 'lucide-react'
 import type { Lead, StatusLead, Categoria } from '@/lib/types'
 import { getStatusConfig, getCategoriaConfig, formatDate } from '@/lib/utils'
 import { LeadModal } from './LeadModal'
+import { CadastrarLeadModal } from './CadastrarLeadModal'
 
 const STATUS_OPTIONS: { value: string; label: string }[] = [
   { value: '', label: 'Todos os status' },
@@ -36,6 +37,7 @@ export function LeadsTable({ initialLeads }: { initialLeads: Lead[] }) {
   const [statusFilter, setStatusFilter] = useState('')
   const [categoriaFilter, setCategoriaFilter] = useState('')
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null)
+  const [showCadastrar, setShowCadastrar] = useState(false)
 
   const filtered = useMemo(() => {
     return leads.filter(lead => {
@@ -58,7 +60,13 @@ export function LeadsTable({ initialLeads }: { initialLeads: Lead[] }) {
   return (
     <div className="flex flex-col gap-4">
       {/* Search & Filters */}
-      <div className="flex flex-col sm:flex-row gap-3">
+      <div className="flex flex-col sm:flex-row gap-3 items-start">
+        <button
+          onClick={() => setShowCadastrar(true)}
+          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-green-700 hover:bg-green-600 text-white font-semibold text-sm transition-colors flex-shrink-0"
+        >
+          <UserPlus size={15} /> Cadastrar Lead
+        </button>
         <div className="relative flex-1">
           <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" />
           <input
@@ -177,12 +185,20 @@ export function LeadsTable({ initialLeads }: { initialLeads: Lead[] }) {
         </div>
       </div>
 
-      {/* Modal */}
+      {/* Modal detalhes lead */}
       {selectedLead && (
         <LeadModal
           lead={selectedLead}
           onClose={() => setSelectedLead(null)}
           onUpdate={handleLeadUpdate}
+        />
+      )}
+
+      {/* Modal cadastrar lead */}
+      {showCadastrar && (
+        <CadastrarLeadModal
+          onClose={() => setShowCadastrar(false)}
+          onSaved={() => setShowCadastrar(false)}
         />
       )}
     </div>
